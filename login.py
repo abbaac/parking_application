@@ -67,11 +67,26 @@ def on_leave(e):
     if name == '':
         code.insert(0, 'Password')
 
-code = Entry(frame, width=25, fg='black', border=0, bg='white', font=('Microsoft YaHei UI Light', 11))
+def hide():
+    if code.get() == 'Password':
+        return
+    if code.cget('show') == '':
+        eyeButton.config(image=open_eye)
+        code.config(show="*")
+    else:
+        eyeButton.config(image=close_eye)
+        code.config(show="")
+
+code = Entry(frame, width=25, fg='black', border=0, bg='white', font=('Microsoft YaHei UI Light', 11)) 
 code.place(x=30, y=150)
 code.insert(0, 'Password')
 code.bind("<FocusIn>", on_enter)
 code.bind("<FocusOut>", on_leave)
+
+close_eye = PhotoImage(file="icons/close_eye.png").subsample(3)
+open_eye = PhotoImage(file="icons/open_eye.png").subsample(3)
+eyeButton = Button(frame, image=close_eye, bd=0, bg="white", activebackground="white", cursor="hand2", command=hide)
+eyeButton.place(relx=0.85, y=150)
 
 Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
 
