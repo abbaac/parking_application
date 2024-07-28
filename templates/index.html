@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Lot Occupancy</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            text-align: center;
+            margin: 0 auto;
+        }
+        #occupancy-chart {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        #pieChart {
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Parking Lot Occupancy</h1>
+        <div id="occupancy-chart">
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div id="occupancy-status">
+            <p>Total Spaces: <span id="total-spaces">Loading...</span></p>
+            <p>Free Spaces: <span id="free-spaces">Loading...</span></p>
+            <p>Occupied Spaces: <span id="occupied-spaces">Loading...</span></p>
+        </div>
+        <div id="available-spots">
+            <h2>Available Parking Spots</h2>
+            <div id="spots-list">
+                <!-- Available spots will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchOccupancyData() {
+            try {
+                const response = await fetch('/occupancy');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    document.getElementById('total-spaces').textContent = data.data.total_spaces;
+                    document.getElementById('free-spaces').textContent = data.data.free_spaces;
+                    document.getElementById('occupied-spaces').textContent = data.data.occupied_spaces;
+
+                    const spotsList = document.getElementById('spots-list');
+                    spotsList.innerHTML = ''; // Clear previous spots
+
+                    data.data.available_spots.forEach((spot, index) => {
+                        const spotElement = document.createElement('div');
+                        spotElement.className = 'spot';
+                        spotElement.textContent = `Parking spot available at position ${spot}`;
+                        spotsList.appendChild(spotElement);
+                    });
+
+                    // Render the pie chart
+                    const ctx = document.getElementById('pieChart').getContext('2d');
+                    const pieChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Free Spaces', 'Occupied Spaces'],
+                            datasets: [{
+                                data: [data.data.free_spaces, data.data.occupied_spaces],
+                                backgroundColor: ['green', 'red'],
+                                borderColor: ['black', 'black'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                                        }
+                                    }
+                                },
+                                datalabels: {
+                                    display: true,
+                                    color: 'white',
+                                    formatter: (value, context) => {
+                                        return context.chart.data.labels[context.dataIndex];
+                                    }
+                                }
+                            }
+                        },
+                        plugins: [ChartDataLabels]
+                    });
+                } else {
+                    document.getElementById('occupancy-status').textContent = 'Error fetching occupancy data.';
+                }
+            } catch (error) {
+                document.getElementById('occupancy-status').textContent = 'Error fetching occupancy data.';
+            }
+        }
+
+        // Fetch occupancy data when the page loads
+        window.onload = fetchOccupancyData;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</body>
+</html>
