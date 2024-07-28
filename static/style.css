@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+#occupancy-status p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+#occupancy-status span {
+    font-weight: bold;
+}
+
+#available-spots {
+    margin-top: 20px;
+}
+
+#available-spots h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.spot {
+    background-color: #e0f7fa;
+    border: 1px solid #00838f;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 16px;
+}

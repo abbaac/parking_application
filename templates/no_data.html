@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Data</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .container {
+            text-align: center;
+            margin: 0 auto;
+        }
+        #occupancy-chart {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        #pieChart {
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>No data is being recorded</h1>
+        <div id="occupancy-chart">
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div id="occupancy-status">
+            <p>Total Spaces: 0</p>
+            <p>Free Spaces: 0</p>
+            <p>Occupied Spaces: 0</p>
+        </div>
+        <div id="available-spots">
+            <h2>Available Parking Spots</h2>
+            <div id="spots-list">
+                <!-- No spots available -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script>
+        // Render an empty pie chart
+        const ctx = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Free Spaces', 'Occupied Spaces'],
+                datasets: [{
+                    data: [0, 0],
+                    backgroundColor: ['red', 'green'],
+                    borderColor: ['black', 'black'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        display: true,
+                        color: 'white',
+                        formatter: (value, context) => {
+                            return context.chart.data.labels[context.dataIndex];
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    </script>
+</body>
+</html>
