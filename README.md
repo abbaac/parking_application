@@ -1,5 +1,3 @@
-Here's a README file for your GitHub repository:
-
 ---
 
 # Parking Application
@@ -58,5 +56,3 @@ Contributions are welcome! Please open an issue or submit a pull request.
 This project is licensed under the MIT License.
 
 ---
-
-Feel free to adjust the details according to your project's specifics.
